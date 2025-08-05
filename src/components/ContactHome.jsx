@@ -11,17 +11,16 @@ export const ContactHome = () => {
   const [contactToDelete, setContactToDelete] = useState(null);
  
   useEffect(() => {
-  fetch("https://playground.4geeks.com/todo/todos/lpardo")
-    .then((res) => res.json())
-    .then((data) => {
-      dispatch({ type: "RESET_CONTACTS", payload: data });
-    })
+    fetch("https://playground.4geeks.com/todo/todos/lpardo")
+      .then((res) => res.json())
+      .then((data) => {
+        dispatch({ type: "RESET_CONTACTS", payload: data });
+      })
+      .catch((error) =>
+        console.error("Error al cargar contactos:", error.message)
+      );
+  }, [dispatch]);
 
-    .catch((error) =>
-      console.error("Error al cargar contactos:", error.message)
-    );
-
-}, [dispatch]);
   const eliminarContacto = async (id) => {
     try {
       dispatch({ type: "DELETE_CONTACT", payload: id });
@@ -53,13 +52,41 @@ export const ContactHome = () => {
                   <div className="d-flex justify-content-between align-items-center mb-3">
                     <h3 className="card-title m-0">{contact.fullName || "Full Name"}</h3>
                     <div className="d-flex gap-3">
-                      <h5><FontAwesomeIcon icon={faPen} className="text-dark" style={{ cursor: "pointer" }} onClick={() => navigate(`/edit-contact/${contact.id}`)} /></h5>
-                      <h5><FontAwesomeIcon icon={faTrash} className="text-dark" style={{ cursor: "pointer" }} onClick={() => { setContactToDelete(contact.id); setShowModal(true); }} /></h5>
+                      <h5>
+                        <FontAwesomeIcon
+                          icon={faPen}
+                          className="text-warning fs-5"
+                          style={{ cursor: "pointer" }}
+                          title="Edit contact"
+                          onClick={() => navigate(`/edit-contact/${contact.id}`)}
+                        />
+                      </h5>
+                      <h5>
+                        <FontAwesomeIcon
+                          icon={faTrash}
+                          className="text-danger fs-5"
+                          style={{ cursor: "pointer" }}
+                          title="Delete contact"
+                          onClick={() => {
+                            setContactToDelete(contact.id);
+                            setShowModal(true);
+                          }}
+                        />
+                      </h5>
                     </div>
                   </div>
-                  <h5><FontAwesomeIcon icon={faLocationDot} className="me-2 text-dark" />{contact.address || "Address"}</h5>
-                  <h5><FontAwesomeIcon icon={faPhoneFlip} className="me-2 text-dark" />{contact.phone || "Phone Number"}</h5>
-                  <h5><FontAwesomeIcon icon={faEnvelope} className="me-2 text-dark" />{contact.email || "Email Address"}</h5>
+                  <h5>
+                    <FontAwesomeIcon icon={faLocationDot} className="me-2 text-info fs-5" />
+                    {contact.address || "Address"}
+                  </h5>
+                  <h5>
+                    <FontAwesomeIcon icon={faPhoneFlip} className="me-2 text-success fs-5" />
+                    {contact.phone || "Phone Number"}
+                  </h5>
+                  <h5>
+                    <FontAwesomeIcon icon={faEnvelope} className="me-2 text-primary fs-5" />
+                    {contact.email || "Email Address"}
+                  </h5>
                 </div>
               </div>
             </div>
